@@ -1,0 +1,7 @@
+python
+opencv
+numpy
+scipy
+mayplotlib
+easygui
+
