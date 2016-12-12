@@ -1,4 +1,5 @@
 #!/usr/bin/python
+#will take corrected binary image and rotate it
 import sys
 import numpy as np
 import cv2
