@@ -1,14 +1,12 @@
 ### Recognise person by his hand shape and geometry ###
-#####obtain hand image#####
 
 <br>
-<img align="left" width="700" height="500" src="documents/images/hand.jpg">obtain hand image</img>
+<img align="left" width="700" height="500" alt="oroginal" title="obtain original image" src="documents/images/hand.jpg">
 <br>
-##### get binary image#####
+
 <br>
 <img align="left" width="700" height="500" src="documents/images/binary.png">
 <br>
-##### Get contour with centroid#####
 <br>
 <img align="left" width="700" height="500" src="documents/images/contour.png">
 <br>
