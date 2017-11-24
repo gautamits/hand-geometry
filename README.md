@@ -2,7 +2,7 @@
 #####obtain hand image#####
 
 <br>
-<img align="left" width="700" height="500" src="documents/images/hand.jpg">
+<img align="left" width="700" height="500" src="documents/images/hand.jpg">obtain hand image</img>
 <br>
 ##### get binary image#####
 <br>
