@@ -10,3 +10,4 @@ for i in files:
     output,distances,tips,valleys=midfinger(cv2.imread(i,1))
     if len(valleys)!=5 or len(tips) != 5:
         print i,len(valleys),len(tips)
+        os.remove(i)

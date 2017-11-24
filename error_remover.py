@@ -74,18 +74,26 @@ def plot_distances(tips,valleys,drawing,cX):
     #knuckles=[]
     for i in xrange(1,len(valleys)):
         knuckles.append(midpoint(valleys[i],valleys[i-1]))
-    print knuckles
+    #print knuckles
     for i in knuckles:
         cv2.circle(drawing,i,7,[255,0,0],-1)
     for i,j in zip(tips,knuckles):
         drawline(drawing,i,j,[255,0,0],3)
         dist.append(distance2(i,j))
     #sixth distance
-    drawline(drawing,knuckles[0],knuckles[1],[255,0,0],3)
-    dist.append(distance2(knuckles[0],knuckles[1]))
+    try:
+        drawline(drawing,knuckles[0],knuckles[1],[255,0,0],3)
+        dist.append(distance2(knuckles[0],knuckles[1]))
+    except:
+        print "all knuckles not detected"
+        return drawing,dist
     #seventh distance
-    drawline(drawing,knuckles[1],knuckles[4],[255,0,0],3)
-    dist.append(distance2(knuckles[1],knuckles[4]))
+    try:
+        drawline(drawing,knuckles[1],knuckles[4],[255,0,0],3)
+        dist.append(distance2(knuckles[1],knuckles[4]))
+    except:
+        print "all knuckles not detected"
+        return drawing,dist
     #print dist
     return (drawing,dist)
 
@@ -207,44 +215,7 @@ def get_valleys(cnt,hull,cX,cY):
     for i,j in z:
         valleys.append(j)
     return valleys
-    """valleys=[]
-    for (i,j) in far_points:
-        if j<cY:
-            valleys.append((i,j))
-            #cv2.circle(drawing,(i,j),7,[255,0,0],-1)
-    #obtain valley with thumb
-    arr=[j for (i,j) in valleys]
-    average=sum(arr)/len(arr)
-    valleys=[]
-    d=distance([(0,cY)],[(0,average)])
-    for (i,j) in far_points:
-        if j < d+cY:
-            valleys.append((i,j))
-    valleys=unique(valleys)
-    if len(valleys) > 5:
-        #select five least distances
-        dist=[]
-        for i in valleys:
-            dist.append(distance(i,len(valleys)*(cX,cY)))
-        index=dist.index(max(distance))
-        valleys.pop(index)
-        return valleys
-    below=[]
-    for (i,j) in far_points:
-        if j > cY and i < cX:
-            below.append((j,i))
-    below=sorted(below)
-    try:
-        a,b=below[0]
-        valleys.append((b,a))
-        #a,b=below[1]
-        #valleys.append((b,a))
-    except:
-        return sorted(valleys)
-    valleys=sorted(valleys)
 
-    return valleys
-    """
 def fitline(img,cnt):
     rows,cols = img.shape[:2]
     [vx,vy,x,y] = cv2.fitLine(cnt, cv2.cv.CV_DIST_L2,0,0.01,0.01)
@@ -266,6 +237,7 @@ def midfinger(img):
     #drawing = reverse(drawing)
     #img=cv2.medianBlur(img,7)
     gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+    #return (gray,None,None,None)
     ##thresh,binary = cv2.threshold(gray,110,255,cv2.THRESH_BINARY | cv2.THRESH_OTSU)
     binary = cv2.inRange(gray,65,255)
     #find contour
@@ -277,19 +249,25 @@ def midfinger(img):
     cY = int(M["m01"] / M["m00"])
     #xr=reference(binary,cY)
     #cv2.circle(drawing,(xr,cY),7,(255,0,0),-1)
+    #draw contour
+    cv2.drawContours(drawing,[cnt],0,(255,255,255),2)
     cv2.circle(drawing,(cX,cY),7,(0,255,0),-1)
+
     hull = cv2.convexHull(cnt,returnPoints = False)
     valleys=get_valleys(cnt,hull,cX,cY)
     for (i,j) in valleys:
         cv2.circle(drawing,(i,j),15,[0,0,255],-1)
     arr=[]
+
     for (i,j) in valleys:
         arr.append(j)
     average=sum(arr)/len(arr)
     tips=get_tips(cnt,hull,average)
     for (i,j) in tips:
         cv2.circle(drawing,(i,j),7,[0,255,0],-1)
-    #draw contour
-    cv2.drawContours(drawing,[cnt],0,(255,255,255),2)
+
+
     drawing,distances=plot_distances(tips,valleys,drawing,cX)
+    fore_finger=distances[1]
+    distances=[i/fore_finger for i in distances]
     return (drawing,distances,tips,valleys)

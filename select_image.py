@@ -25,6 +25,7 @@ def accept():
     name=f[len(f)-1]
     copyfile(files[index],"/home/amit/"+saved+"/"+name)
     index+=1
+    tk.title(files[index])
     print index,files[index]
     output,distances,tips,valleys = midfinger(cv2.resize(cv2.imread(files[index],1),(1200,700)))
     output=cv2.cvtColor(output,cv2.COLOR_BGR2RGB)
@@ -37,6 +38,7 @@ def accept():
 def deny():
     global index
     index+=1
+    tk.title(files[index])
     print index,files[index]
     output,distances,tips,valleys = midfinger(cv2.resize(cv2.imread(files[index],1),(1200,700)))
     output=cv2.cvtColor(output,cv2.COLOR_BGR2RGB)
@@ -54,6 +56,7 @@ cancel = Button(page1,command=deny,text="cancel")
 ok.pack(side=LEFT,expand=1,fill=BOTH)
 cancel.pack(side=RIGHT,expand=1,fill=BOTH)
 page3 = Frame(tk,bg="blue",width=1200,height=700)
+tk.title(files[index])
 img=cv2.imread(files[index],1)
 img=cv2.resize(img,(1200,700))
 output,distances,tips,valleys=midfinger(img)
